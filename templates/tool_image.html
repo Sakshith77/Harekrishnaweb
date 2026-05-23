@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Image Resizer - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-image"></i> Image Resizer</h1>
+        <p>Resize and preview images in browser</p>
+    </div>
+</section>
+
+<section class="tool-page">
+    <div class="tool-card">
+        <div class="form-group">
+            <label>Upload Image</label>
+            <input type="file" id="img-input" accept="image/*" class="file-input">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Width (px)</label>
+                <input type="number" id="img-width" placeholder="Auto">
+            </div>
+            <div class="form-group">
+                <label>Height (px)</label>
+                <input type="number" id="img-height" placeholder="Auto">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Quality: <span id="img-quality-val">90</span>%</label>
+            <input type="range" id="img-quality" min="10" max="100" value="90" class="range-slider" 
+                   oninput="document.getElementById('img-quality-val').textContent = this.value">
+        </div>
+        <div class="tool-actions">
+            <button class="btn btn-primary" onclick="imgResize()">
+                <i class="fas fa-compress"></i> Resize & Preview
+            </button>
+        </div>
+        <div class="image-preview-wrap" id="img-preview-wrap" style="display:none;">
+            <label>Preview</label>
+            <img id="img-preview" class="image-preview">
+            <div class="image-meta" id="img-meta"></div>
+            <a id="img-download" class="btn btn-primary" download="resized-image.jpg">
+                <i class="fas fa-download"></i> Download
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let originalImage = null;
+
+document.getElementById('img-input').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        originalImage = new Image();
+        originalImage.onload = function() {
+            document.getElementById('img-width').value = this.width;
+            document.getElementById('img-height').value = this.height;
+        };
+        originalImage.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+function imgResize() {
+    if (!originalImage) { alert('Please upload an image first'); return; }
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    let w = parseInt(document.getElementById('img-width').value) || originalImage.width;
+    let h = parseInt(document.getElementById('img-height').value) || originalImage.height;
+
+    canvas.width = w;
+    canvas.height = h;
+    ctx.drawImage(originalImage, 0, 0, w, h);
+
+    const quality = parseInt(document.getElementById('img-quality').value) / 100;
+    const dataUrl = canvas.toDataURL('image/jpeg', quality);
+
+    document.getElementById('img-preview').src = dataUrl;
+    document.getElementById('img-preview-wrap').style.display = 'block';
+    document.getElementById('img-download').href = dataUrl;
+
+    const size = Math.round((dataUrl.length * 3 / 4) / 1024);
+    document.getElementById('img-meta').textContent = `Size: ${w}x${h}px | ~${size}KB`;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Calculator - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-calculator"></i> Calculator</h1>
+        <p>Simple scientific calculator</p>
+    </div>
+</section>
+
+<section class="tool-page">
+    <div class="calculator-card">
+        <div class="calc-display">
+            <div class="calc-history" id="calc-history"></div>
+            <div class="calc-input" id="calc-input">0</div>
+        </div>
+        <div class="calc-buttons">
+            <button class="calc-btn calc-fn" onclick="calcClear()">C</button>
+            <button class="calc-btn calc-fn" onclick="calcDelete()">⌫</button>
+            <button class="calc-btn calc-fn" onclick="calcOp('%')">%</button>
+            <button class="calc-btn calc-op" onclick="calcOp('/')">÷</button>
+
+            <button class="calc-btn" onclick="calcNum('7')">7</button>
+            <button class="calc-btn" onclick="calcNum('8')">8</button>
+            <button class="calc-btn" onclick="calcNum('9')">9</button>
+            <button class="calc-btn calc-op" onclick="calcOp('*')">×</button>
+
+            <button class="calc-btn" onclick="calcNum('4')">4</button>
+            <button class="calc-btn" onclick="calcNum('5')">5</button>
+            <button class="calc-btn" onclick="calcNum('6')">6</button>
+            <button class="calc-btn calc-op" onclick="calcOp('-')">−</button>
+
+            <button class="calc-btn" onclick="calcNum('1')">1</button>
+            <button class="calc-btn" onclick="calcNum('2')">2</button>
+            <button class="calc-btn" onclick="calcNum('3')">3</button>
+            <button class="calc-btn calc-op" onclick="calcOp('+')">+</button>
+
+            <button class="calc-btn" onclick="calcNum('0')">0</button>
+            <button class="calc-btn" onclick="calcNum('.')">.</button>
+            <button class="calc-btn calc-eq" onclick="calcEqual()" style="grid-column: span 2;">=</button>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let calcCurrent = '0';
+let calcPrev = '';
+let calcOp = null;
+let calcReset = false;
+
+function updateDisplay() {
+    document.getElementById('calc-input').textContent = calcCurrent;
+    document.getElementById('calc-history').textContent = calcPrev + (calcOp ? ' ' + calcOp : '');
+}
+
+function calcNum(n) {
+    if (calcReset) {
+        calcCurrent = n === '.' ? '0.' : n;
+        calcReset = false;
+    } else {
+        if (n === '.' && calcCurrent.includes('.')) return;
+        calcCurrent = calcCurrent === '0' ? n : calcCurrent + n;
+    }
+    updateDisplay();
+}
+
+function calcOp(op) {
+    if (calcOp && !calcReset) calcEqual();
+    calcPrev = calcCurrent;
+    calcOp = op;
+    calcReset = true;
+    updateDisplay();
+}
+
+function calcEqual() {
+    if (!calcOp || !calcPrev) return;
+    const a = parseFloat(calcPrev);
+    const b = parseFloat(calcCurrent);
+    let result;
+    switch(calcOp) {
+        case '+': result = a + b; break;
+        case '-': result = a - b; break;
+        case '*': result = a * b; break;
+        case '/': result = b !== 0 ? a / b : 'Error'; break;
+        case '%': result = a % b; break;
+        default: return;
+    }
+    calcCurrent = String(result);
+    calcPrev = '';
+    calcOp = null;
+    calcReset = true;
+    updateDisplay();
+}
+
+function calcClear() {
+    calcCurrent = '0';
+    calcPrev = '';
+    calcOp = null;
+    updateDisplay();
+}
+
+function calcDelete() {
+    calcCurrent = calcCurrent.length > 1 ? calcCurrent.slice(0, -1) : '0';
+    updateDisplay();
+}
+
+// Keyboard support
+document.addEventListener('keydown', function(e) {
+    if (e.key >= '0' && e.key <= '9') calcNum(e.key);
+    if (e.key === '.') calcNum('.');
+    if (e.key === '+') calcOp('+');
+    if (e.key === '-') calcOp('-');
+    if (e.key === '*') calcOp('*');
+    if (e.key === '/') { e.preventDefault(); calcOp('/'); }
+    if (e.key === 'Enter' || e.key === '=') calcEqual();
+    if (e.key === 'Escape') calcClear();
+    if (e.key === 'Backspace') calcDelete();
+});
+</script>
+{% endblock %}

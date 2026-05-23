@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ game.title }} - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="player-page">
+    <div class="game-player-container">
+        <div class="game-player-header">
+            <h1>{{ game.title }}</h1>
+            <div class="game-player-meta">
+                <span class="badge">{{ game.category }}</span>
+                <a href="{{ url_for('games.index') }}" class="btn btn-secondary btn-sm">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+        </div>
+        <div class="game-frame-wrapper">
+            {% if game.is_embed %}
+            <iframe src="{{ game.embed_url }}" frameborder="0" allowfullscreen class="game-frame"></iframe>
+            {% elif game.folder_name %}
+            <iframe src="{{ url_for('static', filename='../uploads/games/' + game.folder_name + '/index.html') }}" 
+                    frameborder="0" allowfullscreen class="game-frame"></iframe>
+            {% else %}
+            <div class="game-fallback">
+                <p>Game file not available for direct play.</p>
+                <p>File: {{ game.file_path }}</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="game-player-info">
+            <p>{{ game.description or 'No description available.' }}</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

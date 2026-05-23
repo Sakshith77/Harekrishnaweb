@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}JSON Formatter - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-brackets-curly"></i> JSON Formatter</h1>
+        <p>Format, validate, and minify JSON</p>
+    </div>
+</section>
+
+<section class="tool-page">
+    <div class="tool-card">
+        <div class="form-group">
+            <label>JSON Input</label>
+            <textarea id="json-input" rows="8" placeholder='{"example": "Paste your JSON here"}'></textarea>
+        </div>
+        <div class="tool-actions">
+            <button class="btn btn-primary" onclick="jsonFormat()">
+                <i class="fas fa-indent"></i> Format
+            </button>
+            <button class="btn btn-secondary" onclick="jsonMinify()">
+                <i class="fas fa-compress"></i> Minify
+            </button>
+            <button class="btn btn-ghost" onclick="jsonClear()">
+                <i class="fas fa-trash"></i> Clear
+            </button>
+        </div>
+        <div class="form-group">
+            <label>Result <span id="json-status" class="json-status"></span></label>
+            <textarea id="json-output" rows="8" readonly placeholder="Formatted JSON will appear here..."></textarea>
+        </div>
+        <button class="btn btn-ghost" onclick="jsonCopy()">
+            <i class="fas fa-copy"></i> Copy Result
+        </button>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function jsonFormat() {
+    const input = document.getElementById('json-input').value.trim();
+    const status = document.getElementById('json-status');
+    try {
+        const obj = JSON.parse(input);
+        document.getElementById('json-output').value = JSON.stringify(obj, null, 2);
+        status.textContent = 'Valid JSON';
+        status.className = 'json-status valid';
+    } catch(e) {
+        document.getElementById('json-output').value = 'Error: ' + e.message;
+        status.textContent = 'Invalid JSON';
+        status.className = 'json-status invalid';
+    }
+}
+function jsonMinify() {
+    const input = document.getElementById('json-input').value.trim();
+    const status = document.getElementById('json-status');
+    try {
+        const obj = JSON.parse(input);
+        document.getElementById('json-output').value = JSON.stringify(obj);
+        status.textContent = 'Valid JSON';
+        status.className = 'json-status valid';
+    } catch(e) {
+        document.getElementById('json-output').value = 'Error: ' + e.message;
+        status.textContent = 'Invalid JSON';
+        status.className = 'json-status invalid';
+    }
+}
+function jsonClear() {
+    document.getElementById('json-input').value = '';
+    document.getElementById('json-output').value = '';
+    document.getElementById('json-status').textContent = '';
+}
+function jsonCopy() {
+    const out = document.getElementById('json-output');
+    out.select();
+    document.execCommand('copy');
+}
+</script>
+{% endblock %}

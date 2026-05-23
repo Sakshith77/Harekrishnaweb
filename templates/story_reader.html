@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ story.title }} - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="reader-page">
+    <article class="reader-article">
+        <header class="reader-header">
+            <div class="reader-cover">
+                <img src="{{ url_for('static', filename='../uploads/images/' + story.cover_image) }}" 
+                     alt="{{ story.title }}"
+                     onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?w=800&h=400&fit=crop'">
+            </div>
+            <div class="reader-meta">
+                <span class="badge">{{ story.category }}</span>
+                <span class="reader-read-time"><i class="far fa-clock"></i> {{ story.read_time }}</span>
+            </div>
+            <h1 class="reader-title">{{ story.title }}</h1>
+            <p class="reader-author">by {{ story.author or 'Unknown Author' }}</p>
+            <div class="reader-divider">
+                <span>🪷</span>
+            </div>
+        </header>
+
+        <div class="reader-content">
+            {{ story.content | replace('
+', '<br>') | safe }}
+        </div>
+
+        <footer class="reader-footer">
+            <div class="reader-divider">
+                <span>🪷</span>
+            </div>
+            <p class="reader-end">Hare Krishna</p>
+            <a href="{{ url_for('stories.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Stories
+            </a>
+        </footer>
+    </article>
+</section>
+{% endblock %}

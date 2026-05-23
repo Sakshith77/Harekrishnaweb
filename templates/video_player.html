@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ video.title }} - Hare Krishna 🪷{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.6.1/video-js.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="player-page">
+    <div class="player-container">
+        <div class="player-wrapper">
+            <video id="video-player" class="video-js vjs-big-play-centered" controls preload="auto" 
+                   poster="{{ url_for('static', filename='images/video-poster.jpg') }}"
+                   data-setup='{}'>
+                {% if video.is_link %}
+                <source src="{{ video.hls_url }}" type="application/x-mpegURL">
+                {% else %}
+                <source src="{{ url_for('static', filename='../uploads/videos/' + video.file_path) }}" type="video/mp4">
+                {% endif %}
+                <p class="vjs-no-js">Please enable JavaScript to view this video.</p>
+            </video>
+        </div>
+        <div class="player-info">
+            <h1>{{ video.title }}</h1>
+            <div class="player-meta">
+                <span class="badge">{{ video.category }}</span>
+                {% if video.is_link %}
+                <span class="badge badge-hls"><i class="fas fa-broadcast-tower"></i> Live Stream</span>
+                {% endif %}
+                <span class="date">{{ video.upload_date[:10] if video.upload_date else '' }}</span>
+            </div>
+            <p class="player-desc">{{ video.description or 'No description available.' }}</p>
+            <div class="player-actions">
+                <a href="{{ url_for('video.index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Videos
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.6.1/video.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var player = videojs('video-player', {
+        fluid: true,
+        responsive: true,
+        html5: {
+            vhs: {
+                overrideNative: true,
+                limitRenditionByPlayerDimensions: true,
+                useDevicePixelRatio: true
+            }
+        }
+    });
+
+    // HLS support check and fallback
+    var video = document.getElementById('video-player');
+    var source = video.querySelector('source');
+
+    if (source && source.type === 'application/x-mpegURL') {
+        if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            // Native HLS support (Safari)
+            video.src = source.src;
+        } else {
+            // Use Video.js HLS handler (uses hls.js internally)
+            player.src({ src: source.src, type: 'application/x-mpegURL' });
+        }
+    }
+
+    player.ready(function() {
+        console.log('Player ready');
+    });
+});
+</script>
+{% endblock %}

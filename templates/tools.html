@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Free Tools - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-tools"></i> Free Tools</h1>
+        <p>Useful utilities and helpers</p>
+    </div>
+</section>
+
+<!-- Tools Grid -->
+<section class="content-grid">
+    <h2 class="section-title">All Tools</h2>
+    <div class="tools-grid">
+        {% for tool in default_tools %}
+        <a href="{{ url_for(tool.route) }}" class="tool-card">
+            <div class="tool-icon">
+                <i class="fas {{ tool.icon }}"></i>
+            </div>
+            <div class="tool-info">
+                <h3>{{ tool.name }}</h3>
+                <p>{{ tool.description }}</p>
+                <span class="tool-category">{{ tool.category }}</span>
+            </div>
+            <div class="tool-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Coming Soon Section -->
+<section class="content-grid">
+    <h2 class="section-title">More Coming Soon</h2>
+    <div class="coming-soon-grid">
+        <div class="coming-soon-card">
+            <i class="fas fa-file-pdf"></i>
+            <span>PDF Tools</span>
+        </div>
+        <div class="coming-soon-card">
+            <i class="fas fa-qrcode"></i>
+            <span>QR Generator</span>
+        </div>
+        <div class="coming-soon-card">
+            <i class="fas fa-compress"></i>
+            <span>File Compressor</span>
+        </div>
+        <div class="coming-soon-card">
+            <i class="fas fa-language"></i>
+            <span>Translator</span>
+        </div>
+        <div class="coming-soon-card">
+            <i class="fas fa-clock"></i>
+            <span>World Clock</span>
+        </div>
+        <div class="coming-soon-card">
+            <i class="fas fa-ruler"></i>
+            <span>Unit Converter</span>
+        </div>
+    </div>
+</section>
+{% endblock %}

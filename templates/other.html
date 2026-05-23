@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Other - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-ellipsis-h"></i> Other</h1>
+        <p>Notes, links, and more</p>
+    </div>
+</section>
+
+<!-- Notes Section -->
+<section class="content-grid">
+    <h2 class="section-title"><i class="fas fa-sticky-note"></i> Notes</h2>
+    <div class="upload-card">
+        <form action="{{ url_for('other.add_note') }}" method="POST" class="upload-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" name="title" placeholder="Note title" required>
+                </div>
+                <div class="form-group">
+                    <select name="category">
+                        <option value="General">General</option>
+                        <option value="Spiritual">Spiritual</option>
+                        <option value="Tasks">Tasks</option>
+                        <option value="Ideas">Ideas</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <textarea name="content" placeholder="Write your note..." rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add Note
+            </button>
+        </form>
+    </div>
+
+    {% if notes %}
+    <div class="notes-grid">
+        {% for note in notes %}
+        <div class="note-card">
+            <div class="note-header">
+                <h4>{{ note.title }}</h4>
+                <span class="badge badge-sm">{{ note.category }}</span>
+            </div>
+            <p class="note-content">{{ note.content }}</p>
+            <div class="note-footer">
+                <span class="note-date">{{ note.updated_date[:10] if note.updated_date else '' }}</span>
+                <form action="{{ url_for('other.delete_note', note_id=note.id) }}" method="POST" onsubmit="return confirm('Delete this note?')">
+                    <button type="submit" class="btn-delete-sm"><i class="fas fa-trash-alt"></i></button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state compact">
+        <p>No notes yet. Add one above.</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Links Section -->
+<section class="content-grid">
+    <h2 class="section-title"><i class="fas fa-link"></i> Links</h2>
+    <div class="upload-card">
+        <form action="{{ url_for('other.add_link') }}" method="POST" class="upload-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" name="title" placeholder="Link title" required>
+                </div>
+                <div class="form-group">
+                    <select name="category">
+                        <option value="General">General</option>
+                        <option value="Spiritual">Spiritual</option>
+                        <option value="Resources">Resources</option>
+                        <option value="Media">Media</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="url" name="url" placeholder="https://example.com" required>
+            </div>
+            <div class="form-group">
+                <input type="text" name="description" placeholder="Short description">
+            </div>
+            <button type="submit" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> Add Link
+            </button>
+        </form>
+    </div>
+
+    {% if links %}
+    <div class="links-list">
+        {% for link in links %}
+        <div class="link-card">
+            <div class="link-icon">
+                <i class="fas fa-external-link-alt"></i>
+            </div>
+            <div class="link-info">
+                <h4><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.title }}</a></h4>
+                <p>{{ link.description or 'No description' }}</p>
+                <span class="badge badge-sm">{{ link.category }}</span>
+            </div>
+            <form action="{{ url_for('other.delete_link', link_id=link.id) }}" method="POST" onsubmit="return confirm('Delete this link?')">
+                <button type="submit" class="btn-delete-sm"><i class="fas fa-trash-alt"></i></button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state compact">
+        <p>No links saved yet. Add one above.</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Future Modules -->
+<section class="content-grid">
+    <h2 class="section-title"><i class="fas fa-rocket"></i> Future Modules</h2>
+    <div class="future-modules">
+        <div class="future-card">
+            <i class="fas fa-download"></i>
+            <span>Downloads Manager</span>
+        </div>
+        <div class="future-card">
+            <i class="fas fa-calendar"></i>
+            <span>Event Calendar</span>
+        </div>
+        <div class="future-card">
+            <i class="fas fa-users"></i>
+            <span>Community</span>
+        </div>
+        <div class="future-card">
+            <i class="fas fa-chart-line"></i>
+            <span>Statistics</span>
+        </div>
+    </div>
+</section>
+{% endblock %}

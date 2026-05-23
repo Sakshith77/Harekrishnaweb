@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}HTML Games - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-gamepad"></i> HTML Games</h1>
+        <p>Upload, embed, and play HTML games</p>
+    </div>
+</section>
+
+<!-- Upload Section -->
+<section class="upload-section">
+    <div class="upload-card">
+        <h3><i class="fas fa-plus-circle"></i> Add Game</h3>
+        <form action="{{ url_for('games.upload') }}" method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" placeholder="Game title" required>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" placeholder="Game description" rows="2"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="Arcade">Arcade</option>
+                        <option value="Puzzle">Puzzle</option>
+                        <option value="Adventure">Adventure</option>
+                        <option value="Quiz">Quiz</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Cover Image</label>
+                    <input type="file" name="cover" accept="image/*">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Game File (.zip or .html)</label>
+                <input type="file" name="file" accept=".zip,.html">
+            </div>
+            <div class="form-divider">
+                <span>OR Embed</span>
+            </div>
+            <div class="form-group">
+                <label>Embed URL</label>
+                <input type="url" name="embed_url" placeholder="https://example.com/game">
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Game
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Games Grid -->
+<section class="content-grid">
+    <h2 class="section-title">Your Games</h2>
+    {% if games %}
+    <div class="games-grid">
+        {% for game in games %}
+        <div class="game-card">
+            <div class="game-cover">
+                <img src="{{ url_for('static', filename='../uploads/images/' + game.cover_image) }}" 
+                     alt="{{ game.title }}" 
+                     onerror="this.src='https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=300&fit=crop'">
+                <div class="game-cover-overlay">
+                    <a href="{{ url_for('games.play', game_id=game.id) }}" class="game-launch-btn">
+                        <i class="fas fa-play"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="game-info">
+                <h3>{{ game.title }}</h3>
+                <p>{{ game.description or 'No description' }}</p>
+                <div class="game-meta">
+                    <span class="badge">{{ game.category }}</span>
+                    {% if game.is_embed %}
+                    <span class="badge badge-embed"><i class="fas fa-link"></i> Embed</span>
+                    {% endif %}
+                    <form action="{{ url_for('games.delete', game_id=game.id) }}" method="POST" class="delete-form-inline" onsubmit="return confirm('Delete this game?')">
+                        <button type="submit" class="btn-delete-sm"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-gamepad"></i></div>
+        <h3>No games yet</h3>
+        <p>Upload a game file or add an embed URL above.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

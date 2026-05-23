@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Base64 Tool - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-code"></i> Base64 Encoder/Decoder</h1>
+        <p>Encode and decode Base64 strings</p>
+    </div>
+</section>
+
+<section class="tool-page">
+    <div class="tool-card">
+        <div class="form-group">
+            <label>Input</label>
+            <textarea id="b64-input" rows="6" placeholder="Enter text to encode or Base64 to decode..."></textarea>
+        </div>
+        <div class="tool-actions">
+            <button class="btn btn-primary" onclick="b64Encode()">
+                <i class="fas fa-lock"></i> Encode
+            </button>
+            <button class="btn btn-secondary" onclick="b64Decode()">
+                <i class="fas fa-unlock"></i> Decode
+            </button>
+            <button class="btn btn-ghost" onclick="b64Clear()">
+                <i class="fas fa-trash"></i> Clear
+            </button>
+        </div>
+        <div class="form-group">
+            <label>Output</label>
+            <textarea id="b64-output" rows="6" readonly placeholder="Result will appear here..."></textarea>
+        </div>
+        <button class="btn btn-ghost" onclick="b64Copy()">
+            <i class="fas fa-copy"></i> Copy Result
+        </button>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function b64Encode() {
+    const input = document.getElementById('b64-input').value;
+    try {
+        document.getElementById('b64-output').value = btoa(input);
+    } catch(e) {
+        document.getElementById('b64-output').value = 'Error: Invalid input for encoding';
+    }
+}
+function b64Decode() {
+    const input = document.getElementById('b64-input').value;
+    try {
+        document.getElementById('b64-output').value = atob(input);
+    } catch(e) {
+        document.getElementById('b64-output').value = 'Error: Invalid Base64 string';
+    }
+}
+function b64Clear() {
+    document.getElementById('b64-input').value = '';
+    document.getElementById('b64-output').value = '';
+}
+function b64Copy() {
+    const out = document.getElementById('b64-output');
+    out.select();
+    document.execCommand('copy');
+}
+</script>
+{% endblock %}

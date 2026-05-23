@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a2e">
+    <title>Hare Krishna 🪷</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f0f1a;
+            --bg-secondary: #1a1a2e;
+            --bg-card: #16213e;
+            --text-primary: #eaeaea;
+            --text-secondary: #a0a0b0;
+            --accent-gold: #d4a574;
+            --accent-lotus: #c9a0dc;
+            --border-color: rgba(255,255,255,0.08);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-lotus));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        .status-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(144, 212, 197, 0.1);
+            border: 1px solid rgba(144, 212, 197, 0.3);
+            border-radius: 20px;
+            color: #90d4c5;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .status-indicator.offline {
+            background: rgba(232, 180, 184, 0.1);
+            border-color: rgba(232, 180, 184, 0.3);
+            color: #e8b4b8;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        .api-url {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.3);
+            padding: 0.75rem;
+            border-radius: 8px;
+            word-break: break-all;
+            margin: 1rem 0;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-gold), #c9956b);
+            color: var(--bg-primary);
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(212, 165, 116, 0.4);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+            max-width: 500px;
+            width: 100%;
+        }
+        .feature {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+        .feature i {
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+        .feature span {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .footer {
+            margin-top: 3rem;
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">🪷</div>
+    <h1>Hare Krishna</h1>
+    <p class="subtitle">His Divine Grace A.C. Bhaktivedanta Swami Srila Prabhupada</p>
+
+    <div class="status-card">
+        <div class="status-indicator" id="status">
+            <span class="status-dot"></span>
+            <span id="status-text">Checking backend...</span>
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+            This is your GitHub Pages frontend. The backend API is hosted separately.
+        </p>
+        <div class="api-url" id="api-url">https://hare-krishna-backend.onrender.com</div>
+        <a href="#" class="btn" id="app-link" target="_blank">
+            <i class="fas fa-external-link-alt"></i>
+            Open Full App
+        </a>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <i class="fas fa-play-circle"></i>
+            <span>Video Player</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-music"></i>
+            <span>Audio Player</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-gamepad"></i>
+            <span>HTML Games</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-tools"></i>
+            <span>Free Tools</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-book-open"></i>
+            <span>Stories</span>
+        </div>
+        <div class="feature">
+            <i class="fas fa-mobile-alt"></i>
+            <span>PWA Ready</span>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>"Chant Hare Krishna and be happy"</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">— Srila Prabhupada</p>
+    </div>
+
+    <script>
+        // CONFIGURE THIS: Your Render backend URL
+        const API_BASE = 'https://hare-krishna-backend.onrender.com';
+
+        document.getElementById('api-url').textContent = API_BASE;
+        document.getElementById('app-link').href = API_BASE;
+
+        // Check if backend is online
+        fetch(API_BASE + '/health')
+            .then(r => r.json())
+            .then(data => {
+                const status = document.getElementById('status');
+                const text = document.getElementById('status-text');
+                status.classList.remove('offline');
+                text.textContent = 'Backend Online ✓';
+            })
+            .catch(() => {
+                const status = document.getElementById('status');
+                const text = document.getElementById('status-text');
+                status.classList.add('offline');
+                text.textContent = 'Backend Offline (Deploy on Render)';
+            });
+    </script>
+</body>
+</html>

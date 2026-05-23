@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-profile">
+            <div class="profile-ring">
+                <div class="profile-image">
+                    <img src="https://images.unsplash.com/photo-1545389336-cf090694435e?w=200&h=200&fit=crop&crop=face" 
+                         alt="Srila Prabhupada" 
+                         onerror="this.src='{{ url_for('static', filename='images/default-avatar.png') }}'">
+                </div>
+            </div>
+        </div>
+        <h1 class="hero-title">Hare Krishna 🪷</h1>
+        <p class="hero-subtitle">His Divine Grace A.C. Bhaktivedanta Swami Srila Prabhupada</p>
+        <div class="hero-decoration">
+            <span class="deco-line"></span>
+            <span class="deco-lotus">🪷</span>
+            <span class="deco-line"></span>
+        </div>
+    </div>
+</section>
+
+<!-- Search Bar -->
+<section class="search-section">
+    <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="dashboard-search" placeholder="Search videos, audio, stories...">
+    </div>
+</section>
+
+<!-- Category Tiles -->
+<section class="categories">
+    <h2 class="section-title">Explore</h2>
+    <div class="category-grid">
+        <a href="{{ url_for('video.index') }}" class="category-card">
+            <div class="category-icon" style="background: linear-gradient(135deg, #ff6b6b, #ee5a24);">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <span class="category-name">Video Player</span>
+            <span class="category-desc">Watch & stream videos</span>
+        </a>
+        <a href="{{ url_for('audio.index') }}" class="category-card">
+            <div class="category-icon" style="background: linear-gradient(135deg, #5f27cd, #341f97);">
+                <i class="fas fa-music"></i>
+            </div>
+            <span class="category-name">Audio Player</span>
+            <span class="category-desc">Listen to kirtans</span>
+        </a>
+        <a href="{{ url_for('games.index') }}" class="category-card">
+            <div class="category-icon" style="background: linear-gradient(135deg, #00d2d3, #01a3a4);">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <span class="category-name">HTML Games</span>
+            <span class="category-desc">Play spiritual games</span>
+        </a>
+        <a href="{{ url_for('tools.index') }}" class="category-card">
+            <div class="category-icon" style="background: linear-gradient(135deg, #feca57, #ff9f43);">
+                <i class="fas fa-tools"></i>
+            </div>
+            <span class="category-name">Free Tools</span>
+            <span class="category-desc">Useful utilities</span>
+        </a>
+        <a href="{{ url_for('stories.index') }}" class="category-card">
+            <div class="category-icon" style="background: linear-gradient(135deg, #ff9ff3, #f368e0);">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <span class="category-name">Reading Stories</span>
+            <span class="category-desc">Spiritual tales</span>
+        </a>
+        <a href="{{ url_for('other.index') }}" class="category-card">
+            <div class="category-icon" style="background: linear-gradient(135deg, #48dbfb, #0abde3);">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+            <span class="category-name">Other</span>
+            <span class="category-desc">Notes & links</span>
+        </a>
+    </div>
+</section>
+
+<!-- Quick Stats -->
+<section class="stats-section">
+    <h2 class="section-title">Library Overview</h2>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-video"></i></div>
+            <div class="stat-number" id="stat-videos">0</div>
+            <div class="stat-label">Videos</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-headphones"></i></div>
+            <div class="stat-number" id="stat-audios">0</div>
+            <div class="stat-label">Audios</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-dice"></i></div>
+            <div class="stat-number" id="stat-games">0</div>
+            <div class="stat-label">Games</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon"><i class="fas fa-book"></i></div>
+            <div class="stat-number" id="stat-stories">0</div>
+            <div class="stat-label">Stories</div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Content -->
+<section class="recent-section">
+    <h2 class="section-title">Quick Access</h2>
+    <div class="quick-actions">
+        <a href="{{ url_for('video.index') }}" class="quick-action">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>Upload Video</span>
+        </a>
+        <a href="{{ url_for('audio.index') }}" class="quick-action">
+            <i class="fas fa-microphone"></i>
+            <span>Upload Audio</span>
+        </a>
+        <a href="{{ url_for('stories.index') }}" class="quick-action">
+            <i class="fas fa-pen-fancy"></i>
+            <span>Write Story</span>
+        </a>
+        <a href="{{ url_for('tools.calculator') }}" class="quick-action">
+            <i class="fas fa-calculator"></i>
+            <span>Calculator</span>
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="app-footer">
+    <div class="footer-content">
+        <p class="footer-quote">"Chant Hare Krishna and be happy"</p>
+        <p class="footer-credit">— Srila Prabhupada</p>
+        <div class="footer-divider">
+            <span>🪷</span>
+        </div>
+        <p class="footer-copy">Hare Krishna App &copy; 2024</p>
+    </div>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Fetch stats on load
+fetch('{{ url_for("api.stats") }}')
+    .then(r => r.json())
+    .then(data => {
+        document.getElementById('stat-videos').textContent = data.videos;
+        document.getElementById('stat-audios').textContent = data.audios;
+        document.getElementById('stat-games').textContent = data.games;
+        document.getElementById('stat-stories').textContent = data.stories;
+    })
+    .catch(() => {});
+
+// Dashboard search
+document.getElementById('dashboard-search').addEventListener('input', function(e) {
+    const q = e.target.value.trim();
+    if (q.length < 2) return;
+    fetch('{{ url_for("api.search") }}?q=' + encodeURIComponent(q))
+        .then(r => r.json())
+        .then(data => {
+            // Could show results in a dropdown
+        })
+        .catch(() => {});
+});
+</script>
+{% endblock %}

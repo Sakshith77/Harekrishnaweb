@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Reading Stories - Hare Krishna 🪷{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="page-header-content">
+        <h1><i class="fas fa-book-open"></i> Reading Stories</h1>
+        <p>Spiritual stories and teachings</p>
+    </div>
+</section>
+
+<!-- Upload Section -->
+<section class="upload-section">
+    <div class="upload-card">
+        <h3><i class="fas fa-pen-fancy"></i> Add Story</h3>
+        <form action="{{ url_for('stories.upload') }}" method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" placeholder="Story title" required>
+                </div>
+                <div class="form-group">
+                    <label>Author</label>
+                    <input type="text" name="author" placeholder="Author name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Short Description</label>
+                <textarea name="description" placeholder="Brief description" rows="2"></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="Pastimes">Pastimes</option>
+                        <option value="Teachings">Teachings</option>
+                        <option value="History">History</option>
+                        <option value="Philosophy">Philosophy</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Read Time</label>
+                    <input type="text" name="read_time" placeholder="e.g. 5 min" value="5 min">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Cover Image</label>
+                <input type="file" name="cover" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>Story Content</label>
+                <textarea name="content" placeholder="Write your story here..." rows="10" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add Story
+            </button>
+        </form>
+    </div>
+</section>
+
+<!-- Stories Grid -->
+<section class="content-grid">
+    <h2 class="section-title">Your Stories</h2>
+    {% if stories %}
+    <div class="stories-grid">
+        {% for story in stories %}
+        <div class="story-card">
+            <div class="story-cover">
+                <img src="{{ url_for('static', filename='../uploads/images/' + story.cover_image) }}" 
+                     alt="{{ story.title }}"
+                     onerror="this.src='https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=300&fit=crop'">
+                <div class="story-cover-overlay">
+                    <span class="story-read-time"><i class="far fa-clock"></i> {{ story.read_time }}</span>
+                </div>
+            </div>
+            <div class="story-info">
+                <div class="story-meta-top">
+                    <span class="badge">{{ story.category }}</span>
+                </div>
+                <h3>{{ story.title }}</h3>
+                <p class="story-author">by {{ story.author or 'Unknown' }}</p>
+                <p class="story-desc">{{ story.description or 'No description' }}</p>
+                <div class="story-actions">
+                    <a href="{{ url_for('stories.read', story_id=story.id) }}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-book-open"></i> Read
+                    </a>
+                    <form action="{{ url_for('stories.delete', story_id=story.id) }}" method="POST" class="delete-form-inline" onsubmit="return confirm('Delete this story?')">
+                        <button type="submit" class="btn-delete-sm"><i class="fas fa-trash-alt"></i></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon"><i class="fas fa-book"></i></div>
+        <h3>No stories yet</h3>
+        <p>Write your first spiritual story above.</p>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

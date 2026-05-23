@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="Hare Krishna - A spiritual multimedia platform">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>{% block title %}Hare Krishna 🪷{% endblock %}</title>
+    <link rel="manifest" href="{{ url_for('manifest') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-192x192.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-sticker">
+            <div class="sticker-ring"></div>
+            <div class="sticker-ring sticker-ring-2"></div>
+            <div class="sticker-center">🪷</div>
+        </div>
+        <p class="loading-text">Hare Krishna</p>
+    </div>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <span class="logo-icon">🪷</span>
+                <span class="logo-text">Hare Krishna</span>
+            </div>
+            <button class="sidebar-close" onclick="closeSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="{{ url_for('index') }}" class="nav-item {% if request.endpoint == 'index' %}active{% endif %}">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="{{ url_for('video.index') }}" class="nav-item {% if request.endpoint and 'video' in request.endpoint %}active{% endif %}">
+                <i class="fas fa-play-circle"></i>
+                <span>Video Player</span>
+            </a>
+            <a href="{{ url_for('audio.index') }}" class="nav-item {% if request.endpoint and 'audio' in request.endpoint %}active{% endif %}">
+                <i class="fas fa-music"></i>
+                <span>Audio Player</span>
+            </a>
+            <a href="{{ url_for('games.index') }}" class="nav-item {% if request.endpoint and 'games' in request.endpoint %}active{% endif %}">
+                <i class="fas fa-gamepad"></i>
+                <span>HTML Games</span>
+            </a>
+            <a href="{{ url_for('tools.index') }}" class="nav-item {% if request.endpoint and 'tools' in request.endpoint %}active{% endif %}">
+                <i class="fas fa-tools"></i>
+                <span>Free Tools</span>
+            </a>
+            <a href="{{ url_for('stories.index') }}" class="nav-item {% if request.endpoint and 'stories' in request.endpoint %}active{% endif %}">
+                <i class="fas fa-book-open"></i>
+                <span>Reading Stories</span>
+            </a>
+            <a href="{{ url_for('other.index') }}" class="nav-item {% if request.endpoint and 'other' in request.endpoint %}active{% endif %}">
+                <i class="fas fa-ellipsis-h"></i>
+                <span>Other</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <p>His Divine Grace</p>
+            <p class="sidebar-footer-small">A.C. Bhaktivedanta Swami</p>
+        </div>
+    </aside>
+
+    <!-- Top Navigation -->
+    <header class="top-nav">
+        <button class="menu-btn" onclick="openSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="{{ url_for('index') }}" class="nav-brand">
+            <span class="brand-icon">🪷</span>
+            <span class="brand-text">Hare Krishna</span>
+        </a>
+        <div class="nav-search">
+            <i class="fas fa-search"></i>
+            <input type="text" id="global-search" placeholder="Search..." autocomplete="off">
+            <div id="search-results" class="search-results"></div>
+        </div>
+        <button class="install-btn" id="install-btn" style="display:none;">
+            <i class="fas fa-download"></i>
+        </button>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">
+                        <span>{{ message }}</span>
+                        <button onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="bottom-nav">
+        <a href="{{ url_for('index') }}" class="bottom-item {% if request.endpoint == 'index' %}active{% endif %}">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="{{ url_for('video.index') }}" class="bottom-item {% if request.endpoint and 'video' in request.endpoint %}active{% endif %}">
+            <i class="fas fa-play-circle"></i>
+            <span>Video</span>
+        </a>
+        <a href="{{ url_for('audio.index') }}" class="bottom-item {% if request.endpoint and 'audio' in request.endpoint %}active{% endif %}">
+            <i class="fas fa-music"></i>
+            <span>Audio</span>
+        </a>
+        <a href="{{ url_for('tools.index') }}" class="bottom-item {% if request.endpoint and 'tools' in request.endpoint %}active{% endif %}">
+            <i class="fas fa-tools"></i>
+            <span>Tools</span>
+        </a>
+        <a href="{{ url_for('stories.index') }}" class="bottom-item {% if request.endpoint and 'stories' in request.endpoint %}active{% endif %}">
+            <i class="fas fa-book-open"></i>
+            <span>Stories</span>
+        </a>
+    </nav>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
