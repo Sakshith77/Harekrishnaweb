@@ -8,9 +8,9 @@
         <div class="hero-profile">
             <div class="profile-ring">
                 <div class="profile-image">
-                    <img src="https://images.unsplash.com/photo-1545389336-cf090694435e?w=200&h=200&fit=crop&crop=face" 
-                         alt="Srila Prabhupada" 
-                         onerror="this.src='{{ url_for('static', filename='images/default-avatar.png') }}'">
+                  <img src="{{ url_for('static', filename='images/srila_prabhupada.jpg') }}"
+     alt="Srila Prabhupada" 
+     onerror="this.onerror=null;this.src='/static/images/default-avatar.png'">
                 </div>
             </div>
         </div>
